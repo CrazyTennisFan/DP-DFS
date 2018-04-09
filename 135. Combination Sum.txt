@@ -1,0 +1,84 @@
+Given a set of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers sums to T.
+
+The same repeated number may be chosen from C unlimited number of times.
+
+ Notice
+All numbers (including target) will be positive integers.
+Elements in a combination (a1, a2, … , ak) must be in non-descending order. (ie, a1 ≤ a2 ≤ … ≤ ak).
+The solution set must not contain duplicate combinations.
+
+
+Example
+Given candidate set [2,3,6,7] and target 7, a solution set is:
+
+[7]
+[2, 2, 3]
+
+
+-----------------------------------------------------------------------------------------------------------------
+
+
+public class Solution {
+    /*
+     * @param candidates: A list of integers
+     * @param target: An integer
+     * @return: A list of lists of integers
+     */
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        // write your code here
+        List<List<Integer>> results = new ArrayList<>();
+        if (candidates == null || candidates.length == 0)
+        {
+            return results;
+        }
+        
+        int[] nums = removeDup(candidates);
+        Arrays.sort(nums);
+        dfs(results, new ArrayList<>(), target, nums, 0);
+        
+        return results;
+    }
+    
+    private void dfs(List<List<Integer>> results, List<Integer> subset, int target, int[] nums, int startIndex)
+    {
+        
+        for(int i = startIndex; i < nums.length; i++)
+        {
+            if(nums[i] > target)
+            {
+                break;
+            }
+            
+            if(nums[i] == target)
+            {
+                List<Integer> newsubset = new ArrayList<>(subset);
+                newsubset.add(nums[i]);
+                results.add(newsubset);
+                break;
+            }
+            
+            subset.add(nums[i]);
+            dfs(results, subset, target-nums[i], nums, i);
+            subset.remove(subset.size()-1);    
+        }
+    }
+    
+    private int[] removeDup(int[] candidates)
+    {
+        HashSet<Integer> set = new HashSet<>();
+        for(int x : candidates)
+        {
+            set.add(x);
+        }
+        
+        int[] nums = new int[set.size()];
+        Iterator iter = set.iterator();
+        int index = 0;
+        while(iter.hasNext())
+        {
+            nums[index++] = (int)(iter.next());
+        }
+        
+        return nums;
+    }
+}
