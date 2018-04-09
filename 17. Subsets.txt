@@ -1,0 +1,113 @@
+Given a set of distinct integers, return all possible subsets.
+
+Notice:
+
+Elements in a subset must be in non-descending order.
+The solution set must not contain duplicate subsets.
+
+
+Example
+If S = [1,2,3], a solution is:
+
+[
+  [3],
+  [1],
+  [2],
+  [1,2,3],
+  [1,3],
+  [2,3],
+  [1,2],
+  []
+]
+
+
+------------------------------------------------------------------------------
+
+
+Solution 1:    DFS
+
+public class Solution {
+    /**
+     * @param nums: A set of numbers
+     * @return: A list of lists
+     */
+    public List<List<Integer>> subsets(int[] nums) {
+        // write your code here
+        List<List<Integer>> results = new ArrayList<>();
+        if (nums == null)
+        {
+            return results;
+        }
+        Arrays.sort(nums);
+        
+        dfs(results, new ArrayList<>(), 0, nums);
+        
+        return results;
+        
+    }
+    
+    private void dfs(List<List<Integer>> results, List<Integer> subset, int startIndex, int[] nums)
+    {
+        results.add(new ArrayList<>(subset));
+        
+        for(int i = startIndex; i < nums.length; i++)
+        {
+            subset.add(nums[i]);
+            dfs(results, subset, i+1, nums);
+            subset.remove(subset.size()-1);
+        }
+    }
+}
+
+
+
+------------------------------------------------------------------------------
+
+
+Solution 2: BFS   // reference from jiuzhang ling hu chong
+
+
+public class Solution {
+    /**
+     * @param nums: A set of numbers
+     * @return: A list of lists
+     */
+    public List<List<Integer>> subsets(int[] nums) {
+        // write your code here
+        List<List<Integer>> results = new ArrayList<>();
+        if (nums == null)
+        {
+            return results;
+        }
+        Arrays.sort(nums);
+        
+        Queue<List<Integer>> queue = new LinkedList<>();
+        queue.offer(new LinkedList<Integer>());
+        
+        while (!queue.isEmpty()) {
+            List<Integer> subset = queue.poll();
+            results.add(subset);
+            
+            for (int i = 0; i < nums.length; i++) {
+                if (subset.size() == 0 || subset.get(subset.size() - 1) < nums[i]) {
+                    List<Integer> nextSubset = new LinkedList<Integer>(subset);
+                    nextSubset.add(nums[i]);
+                    queue.offer(nextSubset);
+                }
+            }
+        }
+        
+        return results;
+        
+    }
+    
+    
+}
+
+
+
+
+
+
+
+
