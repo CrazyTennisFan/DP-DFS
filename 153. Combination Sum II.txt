@@ -24,7 +24,6 @@ A solution set is:
 
 ---------------------------------------------------------------------------------------------------------
 
-
 public class Solution {
     /**
      * @param num: Given the candidate numbers
@@ -41,7 +40,7 @@ public class Solution {
         
         Arrays.sort(num);
         
-        dfs(results, new ArrayList<>(), 0, num, target, new boolean[num.length]);
+        dfs(results, new ArrayList<>(), 0, num, target);
         
         return results;
     }
@@ -50,11 +49,15 @@ public class Solution {
                      List<Integer> subset, 
                      int startIndex, 
                      int[] nums, 
-                     int target, 
-                     boolean[] visited)
+                     int target)
     {
         for(int i = startIndex; i < nums.length; i++)
         {
+            if(i != startIndex && nums[i] == nums[i-1])
+            {
+                continue;
+            }
+            
             if(nums[i] > target)
             {
                 break;
@@ -68,17 +71,11 @@ public class Solution {
                 break;
             }
             
-            if(i > 0 && nums[i] == nums[i-1] && visited[i-1] == false)
-            {
-                continue;
-            }
             
-            visited[i] = true;
             subset.add(nums[i]);
-            dfs(results, subset, i+1, nums, target-nums[i], visited);
+            dfs(results, subset, i+1, nums, target-nums[i]);
             subset.remove(subset.size()-1);
-            visited[i] = false;;
-            
+           
         }
     }
 }
