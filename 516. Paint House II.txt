@@ -1,0 +1,82 @@
+There are a row of n houses, each house can be painted with one of the k colors. The cost of painting each house with a certain color is different. You have to paint all the houses such that no two adjacent houses have the same color.
+
+The cost of painting each house with a certain color is represented by a n x k cost matrix. For example, costs[0][0] is the cost of painting house 0 with color 0; costs[1][2] is the cost of painting house 1 with color 2, and so on... Find the minimum cost to paint all houses.
+
+Notice:
+
+All costs are positive integers.
+
+Example
+Given n = 3, k = 3, costs = [[14,2,11],[11,14,5],[14,3,10]] return 10
+
+house 0 is color 2, house 1 is color 3, house 2 is color 2, 2 + 5 + 3 = 10
+
+Challenge 
+Could you solve it in O(nk)?
+
+
+————————————————————————————————————————————————————
+
+public class Solution {
+    /**
+     * @param costs: n x k cost matrix
+     * @return: an integer, the minimum cost to paint all houses
+     */
+    public int minCostII(int[][] costs) {
+        // write your code here
+        if(costs == null || costs.length == 0)
+        {
+            return 0;
+        }
+        
+        int n = costs.length;
+        int k = costs[0].length;
+        
+        int[][] f = new int[n+1][k];
+        for(int K = 0; K < k; K++)
+        {
+            f[0][K] = 0;
+        }
+        
+        int a, b;
+        for(int i = 1; i <= n; i++)
+        {
+            a = -1; 
+            b = -1;
+            for(int j = 0; j < k; j++)
+            {
+                if(a == -1 || f[i-1][j] < f[i-1][a])
+                {
+                    b = a;
+                    a = j;
+                }
+                else if( b == -1 || f[i-1][j] < f[i-1][b])
+                {
+                    b = j;
+                }
+            }
+            
+            for(int j = 0; j < k; j++)
+            {
+                if (j == a)
+                {
+                    f[i][j] = f[i-1][b] + costs[i-1][j];
+                }
+                else
+                {
+                    f[i][j] = f[i-1][a] + costs[i-1][j];
+                }
+            }
+            
+        }
+        
+        int res = Integer.MAX_VALUE;
+        for(int i = 0; i < k; i++)
+        {
+            res = Math.min(res, f[n][i]);
+        }
+        
+        return res;
+        
+    }
+}
