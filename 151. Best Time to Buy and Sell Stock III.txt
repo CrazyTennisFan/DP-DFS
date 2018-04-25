@@ -67,3 +67,73 @@ public class Solution {
         
     }
 }
+
+————————————————————————————————————————————————————
+
+
+Solution 2: O(1) Space
+
+
+public class Solution {
+    /**
+     * @param prices: Given an integer array
+     * @return: Maximum profit
+     */
+    public int maxProfit(int[] prices) {
+        // write your code here
+        if(prices == null || prices.length == 0)
+        {
+            return 0;
+        }
+        
+        int n = prices.length;
+        int[][] f = new int[2][5+1];
+        
+        int old, now = 0;
+        
+        for(int i = 1; i <= 5; i++)
+        {
+            f[now][i] = Integer.MIN_VALUE;
+        }
+        f[now][1] = 0;
+        
+        for(int i = 1; i <= n; i++)
+        {
+            old = now;
+            now = 1-now;
+            //for the 1, 3, 5 
+            //f[i][j] = max(f[i-1][j], f[i-1][j-1] + Pi-1 - Pi-2)
+            for(int j = 1; j <= 5; j+=2)
+            {
+                f[now][j] = f[old][j];
+                if(i > 1 && j > 1 && f[old][j-1] != Integer.MIN_VALUE)
+                {
+                    f[now][j] = Math.max(f[now][j], f[old][j-1] + prices[i-1] - prices[i-2]);    
+                }
+                
+            }
+            
+            //for the 2,4 
+            //f[i][j] = max(f[i-1][j-1], f[i-1][j] + Pi-1 - Pi-2)
+            for(int j = 2; j <= 5; j+=2)
+            {
+                f[now][j] = f[old][j-1];
+                if(i > 1 && f[old][j] != Integer.MIN_VALUE)
+                {
+                    f[now][j] = Math.max(f[now][j], f[old][j] + prices[i-1] - prices[i-2]);    
+                }
+            }
+        }
+        
+        int res = 0;
+        for(int i = 1; i <= 5; i+=2)
+        {
+            res = Math.max(res, f[now][i]);
+        }
+        
+        return res;
+        
+    }
+}
+
+
