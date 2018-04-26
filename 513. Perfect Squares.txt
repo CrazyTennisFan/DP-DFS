@@ -1,0 +1,40 @@
+Given a positive integer n, find the least number of perfect 
+square numbers (for example, 1, 4, 9, 16, ...) which sum to n.
+
+Example
+Given n = 12, return 3 because 12 = 4 + 4 + 4
+Given n = 13, return 2 because 13 = 4 + 9
+
+
+————————————————————————————————
+
+Solution:
+
+public class Solution {
+    /**
+     * @param n: a positive integer
+     * @return: An integer
+     */
+    public int numSquares(int n) {
+        // write your code here
+        int[] f = new int[n+1];
+        f[0] = 0;
+        
+        for(int i = 1; i <=n; i++)
+        {
+            f[i] = i;
+            
+            for(int j = 0 ; j <= i; j++)
+            {
+                if(i < j*j )
+                {
+                    break;
+                }
+                f[i] = Math.min(f[i], f[i-j*j]+1); 
+            }
+        }
+        
+        return f[n];
+        
+    }
+}
