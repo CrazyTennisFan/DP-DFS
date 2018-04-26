@@ -1,0 +1,97 @@
+Given a string s, cut s into some substrings such that every substring is a palindrome.
+
+Return the minimum cuts needed for a palindrome partitioning of s.
+
+Example
+Given s = "aab",
+
+Return 1 since the palindrome partitioning ["aa", "b"] could be produced using 1 cut.
+
+
+——————————————————————————————————————————
+
+
+Solution:  O(n^2) Time
+
+public class Solution {
+    /**
+     * @param s: A string
+     * @return: An integer
+     */
+    private boolean[][] calc(char[] s, int n)
+    {
+        boolean[][] isPalin = new boolean[n][n];
+        int i,j,mid;
+        
+        for(i = 0; i < n; i++)
+        {
+            for(j = 0; j < n; j++)
+            {
+                isPalin[i][j] = false;
+            }
+        }
+        
+        for(mid = 0; mid < n; mid++)
+        {
+            i = mid;
+            j = mid;
+            while(i>=0 && j < n && s[i] == s[j])
+            {
+                isPalin[i][j] = true;
+                i--;
+                j++;
+            }
+            
+            i = mid;
+            j = mid + 1;
+            while(i>=0 && j < n && s[i] == s[j])
+            {
+                isPalin[i][j] = true;
+                i--;
+                j++;
+            }
+        }
+        
+        return isPalin;
+        
+    }
+     
+     
+    public int minCut(String s) {
+        // write your code here
+        if(s == null || s.length() == 0)
+        {
+            return 0;
+        }
+        
+        char[] arr = s.toCharArray();
+        int n = arr.length;
+        
+        boolean[][] isPalin = calc(arr, n);
+        
+        int[] f = new int[n+1];
+        f[0] = 0;
+        for(int i = 1; i <=n; i++)
+        {
+            f[i] = Integer.MAX_VALUE;
+            
+            for(int j = 0; j < i; j++)
+            {
+                if(isPalin[j][i-1] == true)
+                {
+                    f[i] = Math.min(f[i], f[j]+1);
+                }
+            }
+        }
+        
+        return f[n]-1;
+        
+    }
+}
+
+
+——————————————————————————————————————————
+
+Solution for print how to cut
+
+
