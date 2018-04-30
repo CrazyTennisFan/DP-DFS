@@ -1,0 +1,45 @@
+There are n coins in a line. 
+Two players take turns to take a coin from one of the ends of the line 
+until there are no more coins left. The player with the larger amount of money wins.
+
+Could you please decide the first player will win or lose?
+
+xample
+Given array A = [3,2,2], return true.
+
+Given array A = [1,2,4], return true.
+
+Given array A = [1,20,4], return false.
+
+
+——————————————————————————————————
+
+
+public class Solution {
+    /**
+     * @param values: a vector of integers
+     * @return: a boolean which equals to true if the first player will win
+     */
+    public boolean firstWillWin(int[] values) {
+        // write your code here
+        int n = values.length;
+        
+        int[][] f = new int[n][n];
+        for(int i = 0; i < n-1; i++)
+        {
+            f[i][i] = 1;
+        }
+        
+        for(int len = 2; len <= n; len++)
+        {
+            for(int i = 0; i <= n-len; i++)
+            {
+                int j = i + len - 1;
+                f[i][j] = Math.max(values[i] - f[i+1][j], values[j] - f[i][j-1]);
+            }
+        }
+        
+        return f[0][n-1] >= 0;
+        
+    }
+}
