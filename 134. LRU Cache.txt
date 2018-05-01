@@ -1,0 +1,99 @@
+All operation is O(1)
+
+public class LRUCache {
+    
+    class ListNode{
+        int key;
+        int value;
+        ListNode next;
+        
+        public ListNode(int key, int value)
+        {
+            this.key = key;
+            this.value = value;
+            this.next = null;
+        }
+    }
+    
+    int len;
+    int capacity;
+    ListNode dummyHead;
+    ListNode tail;
+    Map<Integer, ListNode> map;
+    
+    /*
+    * @param capacity: An integer
+    */public LRUCache(int capacity) {
+        // do intialization if necessary
+        len = 0;
+        this.capacity = capacity;
+        dummyHead = new ListNode(0,0);
+        tail = dummyHead;
+        map = new HashMap<>();
+    }
+
+    /*
+     * @param key: An integer
+     * @return: An integer
+     */
+    public int get(int key) {
+        // write your code here
+        if(!map.containsKey(key))
+        {
+            return -1;
+        }
+        
+        ListNode preNode = map.get(key);
+        ListNode curNode = preNode.next;
+        if(curNode == tail)
+        {
+            return tail.value;
+        }
+        
+        preNode.next = curNode.next;
+        if(preNode.next!=null)
+        {
+            map.put(preNode.next.key, preNode);
+        }
+        
+        map.put(key, tail);
+        tail.next = curNode;
+        tail = tail.next;
+        curNode.next = null;
+        return curNode.value;
+    }
+
+    /*
+     * @param key: An integer
+     * @param value: An integer
+     * @return: nothing
+     */
+    public void set(int key, int value) {
+        // write your code here
+        if(map.containsKey(key))
+        {
+            get(key);
+            map.get(key).next.value = value;
+            return;
+        }
+        
+        ListNode node = new ListNode(key, value);
+        map.put(key, tail);
+        tail.next = node;
+        tail = tail.next;
+        len++;
+       
+        if(len == capacity+1)
+        {
+            System.out.println("key=" + key);
+            
+            map.remove(dummyHead.next.key);
+            dummyHead.next = dummyHead.next.next;
+            map.put(dummyHead.next.key, dummyHead);
+            len--;
+        }
+     
+    }
+    
+   
+}
