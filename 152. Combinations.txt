@@ -1,0 +1,52 @@
+Given two integers n and k, return all possible combinations of k numbers out of 1 ... n.
+
+Notice:
+You don't need to care the order of combinations, 
+but you should make sure the numbers in a combination are sorted.
+
+Example
+Given n = 4 and k = 2, a solution is:
+
+[
+  [2,4],
+  [3,4],
+  [2,3],
+  [1,2],
+  [1,3],
+  [1,4]
+]
+
+
+————————————————————————————————————————
+
+public class Solution {
+    /**
+     * @param n: Given the range of numbers
+     * @param k: Given the numbers of combinations
+     * @return: All the combinations of k numbers out of 1..n
+     */
+    public List<List<Integer>> combine(int n, int k) {
+        // write your code here
+        List<List<Integer>> results = new ArrayList<>();
+        
+        dfs(results, new ArrayList<>(), 1, k, n);
+        
+        return results;
+    }
+    
+    private void dfs(List<List<Integer>> results, List<Integer> l, int start, int k, int n)
+    {
+        if(l.size() == k)
+        {
+            results.add(new ArrayList<>(l));
+            return;
+        }
+        
+        for(int i = start; i <=n; i++)
+        {
+            l.add(i);
+            dfs(results, l, i+1, k, n);
+            l.remove(l.size()-1);
+        }
+    }
+}
