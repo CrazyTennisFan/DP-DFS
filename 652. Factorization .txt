@@ -1,0 +1,65 @@
+A non-negative numbers can be regarded as product of its factors.
+Write a function that takes an integer n and return all possible combinations of its factors.
+
+Notice:
+
+Elements in a combination (a1, a2, … , ak) must be in non-descending order. (ie, a1 ≤ a2 ≤ … ≤ ak).
+The solution set must not contain duplicate combination.
+
+
+Example
+Given n = 8
+return [[2,2,2],[2,4]]
+// 8 = 2 x 2 x 2 = 2 x 4.
+
+Given n = 1
+return []
+
+Given n = 12
+return [[2,6],[2,2,3],[3,4]]
+
+————————————————————————————————————————
+
+public class Solution {
+    /**
+     * @param n: An integer
+     * @return: a list of combination
+     */
+    public List<List<Integer>> getFactors(int n) {
+        // write your code here
+        List<List<Integer>> results = new ArrayList<>();
+        if(n == 1)
+        {
+            return results;
+        }
+        
+        return dfs(2, n);
+    }
+    
+    private List<List<Integer>> dfs(int start, int n)
+    {
+        List<List<Integer>> results = new ArrayList<>();
+        
+        for(int i = start; i <= Math.sqrt(n); i++)
+        {
+            
+            if(n%i == 0)
+            {
+                List<Integer> l = new ArrayList<>();
+                l.add(i);
+                l.add(n/i);
+                results.add(l);
+                List<List<Integer>> segmentations = dfs(i, n/i);
+                for(List<Integer> list: segmentations) 
+                {
+                    list.add(0, i);
+                    results.add(list);
+                }
+            }
+        }
+        
+        return results;
+        
+        
+    }
+}
